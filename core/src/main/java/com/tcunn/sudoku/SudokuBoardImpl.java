@@ -72,6 +72,7 @@ public class SudokuBoardImpl implements SudokuBoard<Integer>, Validator{
         return !hasNulls(boardData) && validate(boardData);
     }
 
+    @Override
     public boolean isSolved(){
         return isSolved(this.boardData);
     }
@@ -112,7 +113,12 @@ public class SudokuBoardImpl implements SudokuBoard<Integer>, Validator{
         setBoardData(populate());
     }
 
-    public boolean isSolvable(List<List<Integer>> board){
+    @Override
+    public boolean isSolvable() {
+        return isSolvable(this.boardData);
+    }
+
+    private boolean isSolvable(List<List<Integer>> board){
 
         List<List<Integer>> boardDataClone = new ArrayList<>();
 
@@ -467,10 +473,4 @@ public class SudokuBoardImpl implements SudokuBoard<Integer>, Validator{
     public boolean validate() {
         return validate(this.boardData);
     }
-
-    @Override
-    public boolean isSolvable() {
-        return isSolvable(this.boardData);
-    }
-    
 }
