@@ -34,7 +34,7 @@ public class Game {
         this(id, sudoku.getBoardData(), sudoku.isSolved());
     }
 
-    public Game(MaskedGame game){
+    public Game(Game game){
         this(game.getId(), game.getBoard(), game.isSolved());
     }
     
