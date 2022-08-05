@@ -25,6 +25,8 @@ public class SudokuBoardImpl implements Board<Integer, Entry<Integer, Integer>>,
 
     private final int sectorLength;
 
+    private List<List<Integer>> mask;
+
     public SudokuBoardImpl(){
         this(DEFAULT_SECTOR_LENGTH);
     }
@@ -60,6 +62,10 @@ public class SudokuBoardImpl implements Board<Integer, Entry<Integer, Integer>>,
         this.sectorLength = (int) Math.sqrt(length);
         this.boardData = boardData;
 
+    }
+
+    public void setMask(List<List<Integer>> mask) {
+        this.mask = mask;
     }
 
     private boolean isSolved(List<List<Integer>> boardData){
@@ -119,6 +125,7 @@ public class SudokuBoardImpl implements Board<Integer, Entry<Integer, Integer>>,
 
     public void makeSolvable(){
         setBoardData(removeRandomValues(this.boardData));
+        setMask(this.boardData);
     }
 
     public List<List<Integer>> removeRandomValues(List<List<Integer>> board){
@@ -282,6 +289,10 @@ public class SudokuBoardImpl implements Board<Integer, Entry<Integer, Integer>>,
 
         if(y < 0 || y >= this.getSideLength()){
             throw new IllegalArgumentException("y coordinate not in valid range");
+        }
+
+        if(mask.get(x).get(y) != null){
+            throw new InvalidMutationException("Cannot modify a starting value.");
         }
 
         this.boardData.get(x).set(y, value);
