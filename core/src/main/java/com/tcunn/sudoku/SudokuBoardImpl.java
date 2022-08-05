@@ -441,7 +441,7 @@ public class SudokuBoardImpl implements Board<Integer, Entry<Integer, Integer>>,
         }
 
         if(valid){
-            checkSectors(board);
+            valid = checkSectors(board);
         }
         
         return valid;
