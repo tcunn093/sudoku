@@ -276,11 +276,11 @@ public class SudokuBoardImpl implements Board<Integer, Entry<Integer, Integer>>,
         int x = position.getKey();
         int y = position.getValue();
 
-        if(x < 0 && x >= this.getSideLength()){
+        if(x < 0 || x >= this.getSideLength()){
             throw new IllegalArgumentException("x coordinate not in valid range");
         }
 
-        if(y < 0 && y >= this.getSideLength()){
+        if(y < 0 || y >= this.getSideLength()){
             throw new IllegalArgumentException("y coordinate not in valid range");
         }
 
