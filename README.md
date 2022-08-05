@@ -25,18 +25,23 @@ Since we are capable of generating solved Sudoku, we can verify that a Sudoku is
 
 # Sudoku REST Service cURL examples
 Create a new game:
+
 `curl -X POST localhost:8000 `
 
 Get an existing game:
+
 `curl -X GET localhost:8000/game/1634fc0b-aa05-4231-b226-2d4a76c80fb4`
 
 Set a value at a position on the Sudoku board:
+
 `curl -X PATCH localhost:8000/game/1634fc0b-aa05-4231-b226-2d4a76c80fb4/x/0/y/0 -H 'Content-Type: application/json' -d '{"value": 7}'`
 
 Update a game board:
+
 `curl -X PUT localhost:8000/game/1634fc0b-aa05-4231-b226-2d4a76c80fb4 -H 'Content-Type: application/json' -d '{"board": [...[...]]}'`
 
 Delete a game:
+
 `curl -X GET localhost:8000/game/1634fc0b-aa05-4231-b226-2d4a76c80fb4`
 
 ## Development
