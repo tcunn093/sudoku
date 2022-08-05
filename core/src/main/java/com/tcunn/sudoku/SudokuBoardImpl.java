@@ -11,11 +11,11 @@ import java.util.Map.Entry;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import com.tcunn.sudoku.game.board.Board;
 import com.tcunn.sudoku.game.board.InvalidMutationException;
+import com.tcunn.sudoku.game.board.SudokuBoard;
 import com.tcunn.sudoku.game.board.Validator;
 
-public class SudokuBoardImpl implements Board<Integer, Entry<Integer, Integer>>, Validator{
+public class SudokuBoardImpl implements SudokuBoard<Integer>, Validator{
 
     private static final Integer DEFAULT_SECTOR_LENGTH = 3;
 
@@ -178,6 +178,10 @@ public class SudokuBoardImpl implements Board<Integer, Entry<Integer, Integer>>,
         }
 
         return board;
+    }
+
+    public boolean hasNulls(){
+        return hasNulls(this.boardData);
     }
 
     private boolean hasNulls(List<List<Integer>> board){
@@ -462,6 +466,11 @@ public class SudokuBoardImpl implements Board<Integer, Entry<Integer, Integer>>,
     @Override
     public boolean validate() {
         return validate(this.boardData);
+    }
+
+    @Override
+    public boolean isSolvable() {
+        return isSolvable(this.boardData);
     }
     
 }
