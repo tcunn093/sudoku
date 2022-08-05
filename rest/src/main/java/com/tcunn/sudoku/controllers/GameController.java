@@ -18,10 +18,6 @@ import com.tcunn.sudoku.entity.Game;
 import com.tcunn.sudoku.entity.Value;
 import com.tcunn.sudoku.service.GameService;
 
-/**
- *
- * A sample greetings controller to return greeting text
- */
 @RestController
 public class GameController {
     
@@ -39,13 +35,19 @@ public class GameController {
         sudoku.initialise();
         sudoku.makeSolvable();
 
-        Game game = new Game(sudoku.getBoardData(), sudoku.isSolved());
+        Game game = new Game(sudoku);
 
         return gameService.save(game);
     }
 
     @PutMapping("/game/{id}")
     public Game updateGame(@RequestBody Game game, @PathVariable("id") String gameId){
+
+        // Overwrite any mask that is provided as input
+        // TODO: Create an entity that does not have a mask to be returned in these requests.
+        Game persistedGame = gameService.findById(gameId);
+        game.setMask(persistedGame.getMask());
+
         return gameService.update(game, gameId);
     }
 
@@ -56,10 +58,10 @@ public class GameController {
                 
         Map.Entry<Integer,Integer> position = new AbstractMap.SimpleEntry<Integer, Integer>(x, y);
 
-        SudokuBoardImpl sudoku = new SudokuBoardImpl(game.getBoard());
+        SudokuBoardImpl sudoku = new SudokuBoardImpl(game.getBoard(), game.getMask());
         sudoku.mutate(value.getValue(), position);
         
-        Game newGame = new Game(id, sudoku.getBoardData(), sudoku.isSolved());
+        Game newGame = new Game(id, sudoku);
         
         return gameService.update(newGame, id);
     }

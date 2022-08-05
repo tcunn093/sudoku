@@ -33,7 +33,7 @@ public class SudokuBoardImpl implements SudokuBoard<Integer>, Validator{
 
     public SudokuBoardImpl(int sectorLength){
         this.sectorLength = sectorLength;
-        reset();
+        this.boardData = generateEmptyMatrix(this.getSideLength());
     }
 
     private static boolean isPerfectSquare(int x)
@@ -64,6 +64,24 @@ public class SudokuBoardImpl implements SudokuBoard<Integer>, Validator{
 
     }
 
+    public SudokuBoardImpl(List<List<Integer>> boardData, List<List<Integer>> mask){
+        this(boardData);
+
+        int length = boardData.size();
+
+        for(List<Integer> row: mask){
+            if(row.size() != length){
+                throw new IllegalArgumentException("Provided mask does not have row and column count equal to provided board.");
+            }
+        }
+
+        this.mask = mask;
+    }
+
+    public List<List<Integer>> getMask() {
+        return mask;
+    }
+
     public void setMask(List<List<Integer>> mask) {
         this.mask = mask;
     }
@@ -87,7 +105,11 @@ public class SudokuBoardImpl implements SudokuBoard<Integer>, Validator{
 
     @Override
     public void reset() {
-        this.boardData = generateEmptyMatrix(this.getSideLength());
+        if(this.getMask() != null){
+            this.boardData = this.getMask();
+        } else {
+            this.boardData = generateEmptyMatrix(this.getSideLength());
+        }
     }
 
     private List<List<Integer>> generateEmptyMatrix(int size){
@@ -301,8 +323,10 @@ public class SudokuBoardImpl implements SudokuBoard<Integer>, Validator{
             throw new IllegalArgumentException("y coordinate not in valid range");
         }
 
-        if(mask.get(x).get(y) != null){
-            throw new InvalidMutationException("Cannot modify a starting value.");
+        if(mask != null){
+            if(mask.get(x).get(y) != null){
+                throw new InvalidMutationException("Cannot modify a starting value.");
+            }
         }
 
         this.boardData.get(x).set(y, value);
