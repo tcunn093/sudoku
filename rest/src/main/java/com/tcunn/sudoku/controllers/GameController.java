@@ -47,6 +47,9 @@ public class GameController {
         MaskedGame persistedGame = gameService.findById(gameId);
         persistedGame.setBoard(game.getBoard());
 
+        //Throws an exception if the board violates the mask
+        SudokuBoardImpl.checkMask(persistedGame.getBoard(), persistedGame.getMask());
+
         return new Game(gameService.update(persistedGame, gameId));
     }
 

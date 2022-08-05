@@ -75,7 +75,30 @@ public class SudokuBoardImpl implements SudokuBoard<Integer>, Validator{
             }
         }
 
+        if(!checkMask(boardData, mask)){
+            throw new IllegalArgumentException("Provided board violates provided mask.");
+        }
+
         this.mask = mask;
+    }
+
+    public static boolean checkMask(List<List<Integer>> boardData, List<List<Integer>> mask){
+
+        boolean valid = true;
+        for(int i = 0; i < boardData.size(); i++){
+            for(int j = 0; j < boardData.size(); j++){
+                if(mask.get(i).get(j) != null){
+                    if(boardData.get(i).get(j) != null && boardData.get(i).get(j) != mask.get(i).get(j)){
+                        valid = false;
+                        break;
+                    }
+                }
+            }
+            if(valid == false){
+                break;
+            }
+        }
+        return valid;
     }
 
     public List<List<Integer>> getMask() {
@@ -212,7 +235,7 @@ public class SudokuBoardImpl implements SudokuBoard<Integer>, Validator{
         return hasNulls(this.boardData);
     }
 
-    private boolean hasNulls(List<List<Integer>> board){
+    private static boolean hasNulls(List<List<Integer>> board){
 
         boolean foundNull = false;
 
@@ -294,7 +317,7 @@ public class SudokuBoardImpl implements SudokuBoard<Integer>, Validator{
         return this.getSideLength();
     }
 
-    private void print(List<List<Integer>> board){
+    private static void print(List<List<Integer>> board){
         for(int i = 0; i < board.size(); i++){
             System.out.println(getRow(board, i));
         }
@@ -351,7 +374,7 @@ public class SudokuBoardImpl implements SudokuBoard<Integer>, Validator{
 
     }
 
-    private boolean hasAllUniqueValues(List<Integer> values){
+    private static boolean hasAllUniqueValues(List<Integer> values){
         Set<Integer> unique = new HashSet<>(values);
         return unique.size() == values.size();
     }
@@ -436,11 +459,11 @@ public class SudokuBoardImpl implements SudokuBoard<Integer>, Validator{
         return sector;
     }
 
-    private List<Integer> getRow(List<List<Integer>> boardData, int x){
+    private static List<Integer> getRow(List<List<Integer>> boardData, int x){
         return boardData.get(x);
     }
 
-    private List<Integer> getColumn(List<List<Integer>> boardData, int y){
+    private static List<Integer> getColumn(List<List<Integer>> boardData, int y){
         List<Integer> col = new ArrayList<>();
 
         for(int i = 0; i < boardData.size(); i++){
