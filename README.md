@@ -46,7 +46,7 @@ Delete a game:
 
 ## Development
 
-To launch the service locally, clone this repository and invoke:
+To launch the service locally:
 1. Make sure Docker is installed. Download here: `https://docs.docker.com/get-docker/`
 2. Clone this repository
 3. Navigate to the root directory of the cloned repository
