@@ -16,8 +16,8 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tcunn.sudoku.converter.BytesToGameConverter;
-import com.tcunn.sudoku.converter.GameToBytesConverter;
+import com.tcunn.sudoku.converter.BytesToMaskedGameConverter;
+import com.tcunn.sudoku.converter.MaskedGameToBytesConverter;
 
 @Configuration
 @EnableRedisRepositories
@@ -25,7 +25,7 @@ public class RedisConfig {
 
     @Bean
     public RedisCustomConversions redisCustomConversions(){
-        return new RedisCustomConversions(Arrays.asList(new GameToBytesConverter(), new BytesToGameConverter()));
+        return new RedisCustomConversions(Arrays.asList(new MaskedGameToBytesConverter(), new BytesToMaskedGameConverter()));
     }
 
     @Bean

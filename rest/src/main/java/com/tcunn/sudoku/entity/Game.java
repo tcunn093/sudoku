@@ -4,24 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.redis.core.RedisHash;
-
 import com.tcunn.sudoku.SudokuBoardImpl;
 
-@RedisHash
 public class Game {
     
     private String id;
     private List<List<Integer>> board;
-    private List<List<Integer>> mask;
     private boolean solved;
 
     public Game(){
-        this(UUID.randomUUID().toString(), new ArrayList<>(), false, new ArrayList<>());
+        this(UUID.randomUUID().toString(), new ArrayList<>(), false);
     }
 
     public Game(List<List<Integer>> board){
-        this(UUID.randomUUID().toString(), board, false, new ArrayList<>());
+        this(UUID.randomUUID().toString(), board, false);
     }
 
     public Game(List<List<Integer>> board, boolean solved){
@@ -29,22 +25,17 @@ public class Game {
     }
 
     public Game(String id, List<List<Integer>> board, boolean solved){
-        this(id, board, solved, new ArrayList<>());
-    }
-
-    public Game(String id, List<List<Integer>> board, boolean solved, List<List<Integer>> mask){
         this.id = id;
         this.board = board;
         this.solved = solved;
-        this.mask = mask;
     }
 
     public Game(String id, SudokuBoardImpl sudoku){
-        this(id, sudoku.getBoardData(), sudoku.isSolved(), sudoku.getMask());
+        this(id, sudoku.getBoardData(), sudoku.isSolved());
     }
 
-    public Game(SudokuBoardImpl sudoku){
-        this(UUID.randomUUID().toString(), sudoku.getBoardData(), sudoku.isSolved(), sudoku.getMask());
+    public Game(MaskedGame game){
+        this(game.getId(), game.getBoard(), game.isSolved());
     }
     
     public String getId() {
@@ -70,15 +61,5 @@ public class Game {
     public void setSolved(boolean solved) {
         this.solved = solved;
     }
-
-    public List<List<Integer>> getMask() {
-        return mask;
-    }
-
-    public void setMask(List<List<Integer>> mask) {
-        this.mask = mask;
-    }
-
-
    
 }

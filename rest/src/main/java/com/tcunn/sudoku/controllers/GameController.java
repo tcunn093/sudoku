@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tcunn.sudoku.SudokuBoardImpl;
 import com.tcunn.sudoku.entity.Game;
+import com.tcunn.sudoku.entity.MaskedGame;
 import com.tcunn.sudoku.entity.Value;
 import com.tcunn.sudoku.service.GameService;
 
@@ -25,7 +26,7 @@ public class GameController {
 
     @GetMapping("/game/{id}")
     public Game findGameById(@PathVariable("id") String gameId){
-        return gameService.findById(gameId);
+        return new Game(gameService.findById(gameId));
     }
 
     @PostMapping("/game")
@@ -35,35 +36,33 @@ public class GameController {
         sudoku.initialise();
         sudoku.makeSolvable();
 
-        Game game = new Game(sudoku);
+        MaskedGame game = new MaskedGame(sudoku);
 
-        return gameService.save(game);
+        return new Game(gameService.save(game));
     }
 
     @PutMapping("/game/{id}")
     public Game updateGame(@RequestBody Game game, @PathVariable("id") String gameId){
 
-        // Overwrite any mask that is provided as input
-        // TODO: Create an entity that does not have a mask to be returned in these requests.
-        Game persistedGame = gameService.findById(gameId);
-        game.setMask(persistedGame.getMask());
+        MaskedGame persistedGame = gameService.findById(gameId);
+        persistedGame.setBoard(game.getBoard());
 
-        return gameService.update(game, gameId);
+        return new Game(gameService.update(persistedGame, gameId));
     }
 
     @PatchMapping("/game/{id}/x/{xPos}/y/{yPos}")
     public Game updateValueAtPosition(@RequestBody Value<Integer> value, @PathVariable("id") String id, @PathVariable("xPos") int x, @PathVariable("yPos") int y){
         
-        Game game = gameService.findById(id);
+        MaskedGame game = gameService.findById(id);
                 
         Map.Entry<Integer,Integer> position = new AbstractMap.SimpleEntry<Integer, Integer>(x, y);
 
         SudokuBoardImpl sudoku = new SudokuBoardImpl(game.getBoard(), game.getMask());
         sudoku.mutate(value.getValue(), position);
         
-        Game newGame = new Game(id, sudoku);
+        game.setBoard(sudoku.getBoardData());
         
-        return gameService.update(newGame, id);
+        return new Game(gameService.update(game, id));
     }
 
     @DeleteMapping("/game/{id}")
@@ -71,5 +70,4 @@ public class GameController {
         gameService.delete(gameId);
     }
 
-    
 }

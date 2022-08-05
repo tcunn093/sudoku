@@ -5,20 +5,20 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tcunn.sudoku.entity.Game;
+import com.tcunn.sudoku.entity.MaskedGame;
 
 @WritingConverter
-public class GameToBytesConverter implements Converter<Game, byte[]> {
+public class MaskedGameToBytesConverter implements Converter<MaskedGame, byte[]> {
 
-  private final Jackson2JsonRedisSerializer<Game> serializer;
+  private final Jackson2JsonRedisSerializer<MaskedGame> serializer;
 
-  public GameToBytesConverter() {
-    serializer = new Jackson2JsonRedisSerializer<Game>(Game.class);
+  public MaskedGameToBytesConverter() {
+    serializer = new Jackson2JsonRedisSerializer<MaskedGame>(MaskedGame.class);
     serializer.setObjectMapper(new ObjectMapper());
   }
 
   @Override
-  public byte[] convert(Game value) {
+  public byte[] convert(MaskedGame value) {
     return serializer.serialize(value);
   }
 }
