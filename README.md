@@ -42,7 +42,7 @@ Update a game board:
 
 Delete a game:
 
-`curl -X GET localhost:8000/game/1634fc0b-aa05-4231-b226-2d4a76c80fb4`
+`curl -X DELETE localhost:8000/game/1634fc0b-aa05-4231-b226-2d4a76c80fb4`
 
 ## Development
 
