@@ -39,10 +39,12 @@ public class RedisConfig {
     @Bean
     public RedisStandaloneConfiguration redisStandaloneConfiguration() {
 
-        String redisUrlString = System.getProperty("REDIS URL");
+        String redisUrlString = System.getProperty("REDIS_URL");
 
         String hostname;
         int port;
+
+        System.out.println("REDIS_URL: " + redisUrlString);
 
         if(redisUrlString != null){
             URL redisUrl;
