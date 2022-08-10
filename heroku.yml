@@ -3,14 +3,13 @@ setup:
     - plan: heroku-redis
       as: redis
 build:
-  docker:
-    rest:
-      build: Dockerfile
-      target: PRODUCTION
-      restart: on-failure
-      ports:
-      - "8000:80"
-      depends_on:
-        - redis
-      links:
-        - redis
+  rest:
+    build: Dockerfile
+    target: PRODUCTION
+    restart: on-failure
+    ports:
+    - "8000:80"
+    depends_on:
+      - redis
+    links:
+      - redis
