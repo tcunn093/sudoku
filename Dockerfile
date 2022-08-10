@@ -1,8 +1,5 @@
 # cache as most as possible in this multistage dockerfile.
-FROM maven:3.6-alpine as DEPS
-
-#cURL is required for Heroku logging
-RUN apk update && apk add curl curl-dev bash 
+FROM maven:3.8.6-openjdk-8-slim as DEPS
 
 WORKDIR /opt/app
 COPY core/ core/
