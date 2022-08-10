@@ -20,6 +20,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcunn.sudoku.converter.BytesToMaskedGameConverter;
 import com.tcunn.sudoku.converter.MaskedGameToBytesConverter;
 
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.RedisURI;
+import io.lettuce.core.api.StatefulRedisConnection;
+
 @Configuration
 @EnableRedisRepositories
 public class RedisConfig {
@@ -45,6 +49,14 @@ public class RedisConfig {
     //     LettuceClientConfiguration configuration = LettuceClientConfiguration.builder().build();
     //     return new LettuceConnectionFactory(redisStandaloneConfiguration, configuration);
     // }
+
+    public static StatefulRedisConnection<String, String> connect() {
+        RedisURI redisURI = RedisURI.create(System.getenv("REDIS_URL"));
+        redisURI.setVerifyPeer(false);
+
+        RedisClient redisClient = RedisClient.create(redisURI);
+        return redisClient.connect();
+    }
 
     @Bean
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
