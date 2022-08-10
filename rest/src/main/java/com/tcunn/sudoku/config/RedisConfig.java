@@ -1,7 +1,7 @@
 package com.tcunn.sudoku.config;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 import org.springframework.boot.autoconfigure.data.redis.LettuceClientConfigurationBuilderCustomizer;
@@ -46,10 +46,10 @@ public class RedisConfig {
         System.out.println("REDIS_URL: " + redisUrlString);
 
         if(redisUrlString != null){
-            URL redisUrl;
+            URI redisUrl;
             try {
-                redisUrl = new URL(redisUrlString);
-            } catch (MalformedURLException e) {
+                redisUrl = new URI(redisUrlString);
+            } catch (URISyntaxException e) {
                 throw new RuntimeException(e.getMessage());
             }
 
