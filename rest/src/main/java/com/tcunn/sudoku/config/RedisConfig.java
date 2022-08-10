@@ -2,6 +2,7 @@ package com.tcunn.sudoku.config;
 
 import java.util.Arrays;
 
+import org.springframework.boot.autoconfigure.data.redis.LettuceClientConfigurationBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -28,29 +29,38 @@ public class RedisConfig {
         return new RedisCustomConversions(Arrays.asList(new MaskedGameToBytesConverter(), new BytesToMaskedGameConverter()));
     }
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        return Jackson2ObjectMapperBuilder.json().build();
-    }
+    // @Bean
+    // public ObjectMapper objectMapper() {
+    //     return Jackson2ObjectMapperBuilder.json().build();
+    // }
 
-    @Bean
-    public RedisStandaloneConfiguration redisStandaloneConfiguration() {
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("redis", 6379);
-        return redisStandaloneConfiguration;
-    }
+    // @Bean
+    // public RedisStandaloneConfiguration redisStandaloneConfiguration() {
+    //     RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("redis", 6379);
+    //     return redisStandaloneConfiguration;
+    // }
     
-    @Bean
-    public RedisConnectionFactory connectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration) {
-        LettuceClientConfiguration configuration = LettuceClientConfiguration.builder().build();
-        return new LettuceConnectionFactory(redisStandaloneConfiguration, configuration);
-    }
+    // @Bean
+    // public RedisConnectionFactory connectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration) {
+    //     LettuceClientConfiguration configuration = LettuceClientConfiguration.builder().build();
+    //     return new LettuceConnectionFactory(redisStandaloneConfiguration, configuration);
+    // }
+
+    // @Bean
+    // public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+    //     StringRedisTemplate template = new StringRedisTemplate();
+    //     template.setDefaultSerializer(new GenericJackson2JsonRedisSerializer(objectMapper()));
+    //     template.setConnectionFactory(redisConnectionFactory);
+    //     return template;
+    // }
 
     @Bean
-    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        StringRedisTemplate template = new StringRedisTemplate();
-        template.setDefaultSerializer(new GenericJackson2JsonRedisSerializer(objectMapper()));
-        template.setConnectionFactory(redisConnectionFactory);
-        return template;
+    public LettuceClientConfigurationBuilderCustomizer lettuceClientConfigurationBuilderCustomizer() {
+        return clientConfigurationBuilder -> {
+            if (clientConfigurationBuilder.build().isUseSsl()) {
+                clientConfigurationBuilder.useSsl().disablePeerVerification();
+            }
+        };
     }
 
 }
