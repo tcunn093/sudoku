@@ -1,5 +1,7 @@
 package com.tcunn.sudoku.config;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 
 import org.springframework.boot.autoconfigure.data.redis.LettuceClientConfigurationBuilderCustomizer;
@@ -20,10 +22,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcunn.sudoku.converter.BytesToMaskedGameConverter;
 import com.tcunn.sudoku.converter.MaskedGameToBytesConverter;
 
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.RedisURI;
-import io.lettuce.core.api.StatefulRedisConnection;
-
 @Configuration
 @EnableRedisRepositories
 public class RedisConfig {
@@ -38,24 +36,37 @@ public class RedisConfig {
         return Jackson2ObjectMapperBuilder.json().build();
     }
 
-    // @Bean
-    // public RedisStandaloneConfiguration redisStandaloneConfiguration() {
-    //     RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("redis", 6379);
-    //     return redisStandaloneConfiguration;
-    // }
+    @Bean
+    public RedisStandaloneConfiguration redisStandaloneConfiguration() {
+
+        String redisUrlString = System.getProperty("REDIS_URL");
+
+        String hostname;
+        int port;
+
+        if(redisUrlString != null){
+            URL redisUrl;
+            try {
+                redisUrl = new URL(redisUrlString);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+
+            hostname = redisUrl.getHost();
+            port = redisUrl.getPort();
+        } else{
+            hostname = "redis";
+            port = 6379;
+        }
+
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(hostname, port);
+        return redisStandaloneConfiguration;
+    }
     
-    // @Bean
-    // public RedisConnectionFactory connectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration) {
-    //     LettuceClientConfiguration configuration = LettuceClientConfiguration.builder().build();
-    //     return new LettuceConnectionFactory(redisStandaloneConfiguration, configuration);
-    // }
-
-    public static StatefulRedisConnection<String, String> connect() {
-        RedisURI redisURI = RedisURI.create(System.getenv("REDIS_URL"));
-        redisURI.setVerifyPeer(false);
-
-        RedisClient redisClient = RedisClient.create(redisURI);
-        return redisClient.connect();
+    @Bean
+    public RedisConnectionFactory connectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration) {
+        LettuceClientConfiguration configuration = LettuceClientConfiguration.builder().build();
+        return new LettuceConnectionFactory(redisStandaloneConfiguration, configuration);
     }
 
     @Bean
