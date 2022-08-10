@@ -36,39 +36,39 @@ public class RedisConfig {
         return Jackson2ObjectMapperBuilder.json().build();
     }
 
-    // @Bean
-    // public RedisStandaloneConfiguration redisStandaloneConfiguration() {
+    @Bean
+    public RedisStandaloneConfiguration redisStandaloneConfiguration() {
 
-    //     String redisUrlString = System.getenv("REDIS_URL");
+        String redisUrlString = System.getenv("REDIS_URL");
 
-    //     RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
 
-    //     System.out.println("REDIS_URL: " + redisUrlString);
+        System.out.println("REDIS_URL: " + redisUrlString);
 
-    //     if(redisUrlString != null){
-    //         URI redisUrl;
-    //         try {
-    //             redisUrl = new URI(redisUrlString);
-    //         } catch (URISyntaxException e) {
-    //             throw new RuntimeException(e.getMessage());
-    //         }
+        if(redisUrlString != null){
+            URI redisUrl;
+            try {
+                redisUrl = new URI(redisUrlString);
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e.getMessage());
+            }
 
-    //         redisStandaloneConfiguration.setHostName(redisUrl.getHost());
-    //         redisStandaloneConfiguration.setPort(redisUrl.getPort());
+            redisStandaloneConfiguration.setHostName(redisUrl.getHost());
+            redisStandaloneConfiguration.setPort(redisUrl.getPort());
 
-    //     } else{
-    //         redisStandaloneConfiguration.setHostName("redis");
-    //         redisStandaloneConfiguration.setPort(6379);
-    //     }
+        } else{
+            redisStandaloneConfiguration.setHostName("redis");
+            redisStandaloneConfiguration.setPort(6379);
+        }
 
-    //     return redisStandaloneConfiguration;
-    // }
+        return redisStandaloneConfiguration;
+    }
     
-    // @Bean
-    // public RedisConnectionFactory connectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration) {
-    //     LettuceClientConfiguration configuration = LettuceClientConfiguration.builder().build();
-    //     return new LettuceConnectionFactory(redisStandaloneConfiguration, configuration);
-    // }
+    @Bean
+    public RedisConnectionFactory connectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration) {
+        LettuceClientConfiguration configuration = LettuceClientConfiguration.builder().build();
+        return new LettuceConnectionFactory(redisStandaloneConfiguration, configuration);
+    }
 
     @Bean
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
