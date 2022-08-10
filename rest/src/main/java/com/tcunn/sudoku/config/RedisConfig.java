@@ -61,6 +61,9 @@ public class RedisConfig {
 
             redisStandaloneConfiguration.setHostName(redisUrl.getHost());
             redisStandaloneConfiguration.setPort(redisUrl.getPort());
+            redisStandaloneConfiguration.setUsername(redisUrl.getUserInfo().split(":")[0]);
+            redisStandaloneConfiguration.setPassword(redisUrl.getUserInfo().split(":")[1]);
+
 
         } else{
             redisStandaloneConfiguration.setHostName("redis");
