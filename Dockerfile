@@ -18,7 +18,7 @@ RUN mvn -B -e -C org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offli
 # of using docker layer caches. If something goes wrong from this
 # line on, all dependencies from DEPS were already downloaded and
 # stored in docker's layers.
-FROM maven:3.6-alpine as BUILDER
+FROM maven:3.8.6-openjdk-8-slim as BUILDER
 WORKDIR /opt/app
 COPY --from=DEPS /root/.m2 /root/.m2
 COPY --from=DEPS /opt/app/ /opt/app
@@ -28,7 +28,7 @@ COPY --from=DEPS /opt/app/ /opt/app
 RUN mvn -B -e clean install -DskipTests=true
 
 # At this point, BUILDER stage should have your .jar or whatever in some path
-FROM openjdk:8-alpine as PRODUCTION
+FROM openjdk:8-jre-alpine as PRODUCTION
 WORKDIR /opt/app
 COPY --from=BUILDER /opt/app/rest/target/rest-1.0-SNAPSHOT.jar .
 CMD [ "java", "-jar", "/opt/app/rest-1.0-SNAPSHOT.jar", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-Xmx256m"]

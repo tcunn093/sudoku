@@ -4,7 +4,9 @@ setup:
       as: redis
 build:
   docker:
-    web: Dockerfile
+    web:
+      dockerfile: Dockerfile
+      target: PRODUCTION
 release:
   image: web
   command:
