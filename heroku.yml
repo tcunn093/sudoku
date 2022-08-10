@@ -4,7 +4,8 @@ setup:
       as: redis
 build:
   docker:
-    release:
-      dockerfile: Dockerfile
-      target: PRODUCTION
     web: Dockerfile
+release:
+  image: web
+  command:
+    - echo 'Starting server after deployment!';

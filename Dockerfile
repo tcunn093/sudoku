@@ -1,6 +1,9 @@
 # cache as most as possible in this multistage dockerfile.
 FROM maven:3.6-alpine as DEPS
 
+#cURL is required for Heroku logging
+RUN apk update && apk add curl curl-dev bash 
+
 WORKDIR /opt/app
 COPY core/ core/
 COPY rest/ rest/
@@ -30,5 +33,5 @@ RUN mvn -B -e clean install -DskipTests=true
 # At this point, BUILDER stage should have your .jar or whatever in some path
 FROM openjdk:8-alpine as PRODUCTION
 WORKDIR /opt/app
-COPY --from=builder /opt/app/rest/target/rest-1.0-SNAPSHOT.jar .
-CMD [ "java", "-jar", "/opt/app/rest-1.0-SNAPSHOT.jar" ]
+COPY --from=BUILDER /opt/app/rest/target/rest-1.0-SNAPSHOT.jar .
+CMD [ "java", "-jar", "/opt/app/rest-1.0-SNAPSHOT.jar", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-Xmx256m"]
