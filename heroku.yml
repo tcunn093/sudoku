@@ -5,6 +5,6 @@ setup:
 build:
   docker:
     release:
-      web: Dockerfile
+      dockerfile: Dockerfile
       target: PRODUCTION
     web: Dockerfile
