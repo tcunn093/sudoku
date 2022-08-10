@@ -1,11 +1,8 @@
 package com.tcunn.sudoku.entity;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.data.redis.core.RedisHash;
-
-import com.tcunn.sudoku.SudokuBoardImpl;
 
 @RedisHash
 public class MaskedGame extends Game {
@@ -19,11 +16,6 @@ public class MaskedGame extends Game {
     public MaskedGame(Game game, List<List<Integer>> mask){
         super(game.getId(), game.getBoard(), game.isSolved());
         this.mask = mask;
-    }
-
-    public MaskedGame(SudokuBoardImpl sudoku){
-        super(UUID.randomUUID().toString(), sudoku.getBoardData(), sudoku.isSolved());
-        this.mask = sudoku.getMask();
     }
 
     public List<List<Integer>> getMask() {

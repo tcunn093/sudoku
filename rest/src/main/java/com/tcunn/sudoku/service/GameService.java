@@ -1,10 +1,5 @@
 package com.tcunn.sudoku.service;
 
-import com.tcunn.sudoku.entity.MaskedGame;
-
-public interface GameService {
-    MaskedGame save(MaskedGame game);
-    MaskedGame findById(String id);
-    MaskedGame update(MaskedGame game, String id);
-    void delete(String id);
+public interface GameService<T, ID, V, P> extends RestService<T, String>{
+    public T updateValueAtPosition(ID id, V value, P position);
 }

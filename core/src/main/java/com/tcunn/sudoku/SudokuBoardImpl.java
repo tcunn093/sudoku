@@ -356,7 +356,12 @@ public class SudokuBoardImpl implements SudokuBoard<Integer>, Validator{
         
     }
 
-    private boolean checkIfValueInValidRange(int value){
+    private boolean checkIfValueInValidRange(Integer value){
+
+        if(value == null){
+            return true;
+        }
+
         return value <= this.getMaximumValue() && value >= MINIMUM_VALUE;
     }
 
