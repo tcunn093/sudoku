@@ -29,10 +29,10 @@ public class RedisConfig {
         return new RedisCustomConversions(Arrays.asList(new MaskedGameToBytesConverter(), new BytesToMaskedGameConverter()));
     }
 
-    // @Bean
-    // public ObjectMapper objectMapper() {
-    //     return Jackson2ObjectMapperBuilder.json().build();
-    // }
+    @Bean
+    public ObjectMapper objectMapper() {
+        return Jackson2ObjectMapperBuilder.json().build();
+    }
 
     // @Bean
     // public RedisStandaloneConfiguration redisStandaloneConfiguration() {
@@ -46,13 +46,13 @@ public class RedisConfig {
     //     return new LettuceConnectionFactory(redisStandaloneConfiguration, configuration);
     // }
 
-    // @Bean
-    // public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-    //     StringRedisTemplate template = new StringRedisTemplate();
-    //     template.setDefaultSerializer(new GenericJackson2JsonRedisSerializer(objectMapper()));
-    //     template.setConnectionFactory(redisConnectionFactory);
-    //     return template;
-    // }
+    @Bean
+    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        StringRedisTemplate template = new StringRedisTemplate();
+        template.setDefaultSerializer(new GenericJackson2JsonRedisSerializer(objectMapper()));
+        template.setConnectionFactory(redisConnectionFactory);
+        return template;
+    }
 
     @Bean
     public LettuceClientConfigurationBuilderCustomizer lettuceClientConfigurationBuilderCustomizer() {
