@@ -30,7 +30,7 @@ COPY rest/src /opt/app/rest/src
 RUN mvn -B -e -o clean install -DskipTests=true
 
 # At this point, BUILDER stage should have your .jar or whatever in some path
-FROM openjdk:8-alpine
+FROM openjdk:8-alpine as PRODUCTION
 WORKDIR /opt/app
 COPY --from=builder /opt/app/rest/target/rest-1.0-SNAPSHOT.jar .
 CMD [ "java", "-jar", "/opt/app/rest-1.0-SNAPSHOT.jar" ]
