@@ -22,6 +22,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tcunn.sudoku.converter.BytesToMaskedGameConverter;
 import com.tcunn.sudoku.converter.MaskedGameToBytesConverter;
 
+import io.lettuce.core.ClientOptions;
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.RedisURI;
+import io.lettuce.core.api.StatefulRedisConnection;
+import io.lettuce.core.protocol.ProtocolVersion;
+
 @Configuration
 @EnableRedisRepositories
 public class RedisConfig {
@@ -63,6 +69,14 @@ public class RedisConfig {
 
         return redisStandaloneConfiguration;
     }
+
+    // public static StatefulRedisConnection<String, String> connect() {
+    //     RedisURI redisURI = RedisURI.create(System.getenv("REDIS_URL"));
+    //     redisURI.setVerifyPeer(false);
+    
+    //     RedisClient redisClient = RedisClient.create(redisURI);
+    //     return redisClient.connect();
+    // }
     
     @Bean
     public RedisConnectionFactory connectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration) {
@@ -84,7 +98,11 @@ public class RedisConfig {
             if (clientConfigurationBuilder.build().isUseSsl()) {
                 clientConfigurationBuilder.useSsl().disablePeerVerification();
             }
-        };
+                    // manually specifying RESP2 
+            clientConfigurationBuilder.clientOptions(ClientOptions.builder()
+            .protocolVersion(ProtocolVersion.RESP2)
+            .build());
+            };
     }
 
 }
