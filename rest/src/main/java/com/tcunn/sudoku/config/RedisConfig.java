@@ -39,10 +39,9 @@ public class RedisConfig {
     @Bean
     public RedisStandaloneConfiguration redisStandaloneConfiguration() {
 
-        String redisUrlString = System.getProperty("REDIS_URL");
+        String redisUrlString = System.getenv("REDIS_URL");
 
-        String hostname;
-        int port;
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
 
         System.out.println("REDIS_URL: " + redisUrlString);
 
@@ -54,14 +53,14 @@ public class RedisConfig {
                 throw new RuntimeException(e.getMessage());
             }
 
-            hostname = redisUrl.getHost();
-            port = redisUrl.getPort();
+            redisStandaloneConfiguration.setHostName(redisUrl.getHost());
+            redisStandaloneConfiguration.setPort(redisUrl.getPort());
+
         } else{
-            hostname = "redis";
-            port = 6379;
+            redisStandaloneConfiguration.setHostName("redis");
+            redisStandaloneConfiguration.setPort(6379);
         }
 
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(hostname, port);
         return redisStandaloneConfiguration;
     }
     
