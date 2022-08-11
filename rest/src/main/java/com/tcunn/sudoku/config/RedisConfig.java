@@ -23,9 +23,6 @@ import com.tcunn.sudoku.converter.BytesToMaskedGameConverter;
 import com.tcunn.sudoku.converter.MaskedGameToBytesConverter;
 
 import io.lettuce.core.ClientOptions;
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.RedisURI;
-import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.protocol.ProtocolVersion;
 
 @Configuration
