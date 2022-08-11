@@ -49,8 +49,6 @@ public class RedisConfig {
 
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
 
-        System.out.println("REDIS_URL: " + redisUrlString);
-
         if(redisUrlString != null){
             URI redisUrl;
             try {
@@ -73,14 +71,6 @@ public class RedisConfig {
         return redisStandaloneConfiguration;
     }
 
-    // public static StatefulRedisConnection<String, String> connect() {
-    //     RedisURI redisURI = RedisURI.create(System.getenv("REDIS_URL"));
-    //     redisURI.setVerifyPeer(false);
-    
-    //     RedisClient redisClient = RedisClient.create(redisURI);
-    //     return redisClient.connect();
-    // }
-    
     @Bean
     public RedisConnectionFactory connectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration) {
         LettuceClientConfiguration configuration = LettuceClientConfiguration.builder().build();
@@ -101,11 +91,13 @@ public class RedisConfig {
             if (clientConfigurationBuilder.build().isUseSsl()) {
                 clientConfigurationBuilder.useSsl().disablePeerVerification();
             }
-                    // manually specifying RESP2 
-            clientConfigurationBuilder.clientOptions(ClientOptions.builder()
-            .protocolVersion(ProtocolVersion.RESP2)
-            .build());
-            };
+            // manually specifying RESP2 
+            clientConfigurationBuilder.clientOptions(
+                ClientOptions.builder()
+                    .protocolVersion(ProtocolVersion.RESP2)
+                    .build()
+            );
+        };
     }
 
 }
