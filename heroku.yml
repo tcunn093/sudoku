@@ -7,7 +7,3 @@ build:
     web:
       dockerfile: Dockerfile
       target: PRODUCTION
-release:
-  image: web
-  command:
-    - echo 'Starting server after deployment!';
